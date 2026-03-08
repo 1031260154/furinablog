@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { posts } from '@/data/posts'
@@ -7,6 +8,9 @@ type PageProps = {
   params: Promise<{ slug: string }>
 }
 
+const siteUrl = 'https://1031260154.github.io'
+const repoBase = '/furinablog'
+
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
 }
@@ -15,6 +19,50 @@ export async function generateStaticParams() {
   return posts.map((post) => ({
     slug: post.slug,
   }))
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const post = posts.find((item) => item.slug === slug)
+
+  if (!post) {
+    return {
+      title: '文章不存在',
+    }
+  }
+
+  const postUrl = `${siteUrl}${repoBase}/posts/${post.slug}/`
+  const imageUrl = `${siteUrl}${repoBase}/images/${post.coverImage}`
+
+  return {
+    title: post.title,
+    description: post.summary,
+    alternates: {
+      canonical: postUrl,
+    },
+    openGraph: {
+      type: 'article',
+      url: postUrl,
+      title: post.title,
+      description: post.summary,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary,
+      images: [imageUrl],
+    },
+  }
 }
 
 export default async function PostDetailPage({ params }: PageProps) {
