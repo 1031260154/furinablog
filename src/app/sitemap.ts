@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next'
-import { posts } from '@/data/posts'
+import { getAllPostsMeta } from '@/lib/posts'
 
 export const dynamic = 'force-static'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://1031260154.github.io/furinablog'
+const baseUrl = 'https://1031260154.github.io/furinablog'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPostsMeta()
 
   const staticPages: MetadataRoute.Sitemap = [
     {
