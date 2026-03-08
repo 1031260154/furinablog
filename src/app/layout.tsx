@@ -5,6 +5,7 @@ const siteName = 'Furinablog'
 const siteDescription = '一个使用 Next.js 构建并发布到 GitHub Pages 的静态博客。'
 const siteUrl = 'https://1031260154.github.io'
 const repoBase = '/furinablog'
+const defaultImage = `${siteUrl}${repoBase}/images/cover-1.png`
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: [
       {
-        url: `${siteUrl}${repoBase}/images/cover-1.jpg`,
+        url: defaultImage,
         width: 1200,
         height: 630,
         alt: siteName,
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteName,
     description: siteDescription,
-    images: [`${siteUrl}${repoBase}/images/cover-1.jpg`],
+    images: [defaultImage],
   },
 }
 
