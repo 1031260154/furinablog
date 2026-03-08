@@ -1,7 +1,28 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import { getAllPostsMeta } from '@/lib/posts'
+
+export const metadata: Metadata = {
+  title: '首页',
+  description: '记录学习路径、项目实践和长期可复用的经验沉淀。',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    url: '/',
+    title: 'Furinablog',
+    description: '记录学习路径、项目实践和长期可复用的经验沉淀。',
+    images: ['/images/cover-1.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Furinablog',
+    description: '记录学习路径、项目实践和长期可复用的经验沉淀。',
+    images: ['/images/cover-1.png'],
+  },
+}
 
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
@@ -32,8 +53,26 @@ export default async function HomePage() {
   const otherPosts = posts.slice(1)
   const basePath = getBasePath()
 
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Furinablog',
+    description: '记录学习路径、项目实践和长期可复用的经验沉淀。',
+    url: 'https://1031260154.github.io/furinablog/',
+    inLanguage: 'zh-CN',
+    author: {
+      '@type': 'Person',
+      name: '梁世豪',
+    },
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.12),_transparent_28%),linear-gradient(to_bottom,_#f8fbff,_#eef4ff_35%,_#f8fafc_100%)] text-slate-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+
       <Header />
 
       <main className="mx-auto max-w-6xl px-6 pb-20 pt-10">
@@ -60,14 +99,14 @@ export default async function HomePage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href={featuredPost ? `/posts/${featuredPost.slug}` : '/about'}
-                  className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+                  className="inline-flex items-center justify-center rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:border-slate-800 hover:bg-slate-800"
                 >
                   {featuredPost ? '阅读最新文章' : '查看关于页面'}
                 </Link>
 
                 <Link
                   href="/about"
-                  className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
+                  className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-950"
                 >
                   关于本站
                 </Link>
@@ -132,7 +171,7 @@ export default async function HomePage() {
                 ) : null}
 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/15 to-transparent" />
-                <div className="absolute left-6 top-6 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-slate-700 backdrop-blur">
+                <div className="absolute left-6 top-6 inline-flex rounded-full border border-white/40 bg-white/90 px-3 py-1 text-xs font-medium text-slate-700 backdrop-blur">
                   精选文章
                 </div>
               </div>
@@ -169,7 +208,7 @@ export default async function HomePage() {
 
                 <Link
                   href={`/posts/${featuredPost.slug}`}
-                  className="mt-6 inline-flex items-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+                  className="mt-6 inline-flex items-center rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:border-slate-800 hover:bg-slate-800"
                 >
                   阅读全文
                 </Link>
@@ -265,9 +304,9 @@ export default async function HomePage() {
 
                     <Link
                       href={`/posts/${post.slug}`}
-                      className="mt-5 inline-flex items-center text-sm font-medium text-sky-700 transition group-hover:text-sky-900"
+                      className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-950"
                     >
-                      阅读全文 →
+                      阅读全文
                     </Link>
                   </div>
                 </article>

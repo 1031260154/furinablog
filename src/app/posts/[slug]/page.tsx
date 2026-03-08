@@ -10,8 +10,9 @@ type PageProps = {
   params: Promise<{ slug: string }>
 }
 
-const siteUrl = 'https://1031260154.github.io'
+const siteOrigin = 'https://1031260154.github.io'
 const repoBase = '/furinablog'
+const siteUrl = `${siteOrigin}${repoBase}`
 
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
@@ -38,7 +39,7 @@ function getCoverImageSrc(basePath: string, coverImage?: string) {
 
 function buildCoverImageUrl(coverImage?: string) {
   const safeCover = coverImage?.replace(/^\/+/, '') || 'images/cover-1.png'
-  return `${siteUrl}${repoBase}/${safeCover.startsWith('images/') ? safeCover : `images/${safeCover}`}`
+  return `${siteUrl}/${safeCover.startsWith('images/') ? safeCover : `images/${safeCover}`}`
 }
 
 export async function generateStaticParams() {
@@ -53,10 +54,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!post) {
     return {
       title: '文章不存在',
+      robots: {
+        index: false,
+        follow: false,
+      },
     }
   }
 
-  const postUrl = `${siteUrl}${repoBase}/posts/${post.slug}/`
+  const postUrl = `/posts/${post.slug}/`
   const imageUrl = buildCoverImageUrl(post.coverImage)
 
   return {
@@ -64,6 +69,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: post.summary,
     alternates: {
       canonical: postUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
     openGraph: {
       type: 'article',
@@ -102,8 +111,28 @@ export default async function PostDetailPage({ params }: PageProps) {
   const olderPost =
     currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.summary,
+    datePublished: new Date(post.createdAt).toISOString(),
+    dateModified: new Date(post.createdAt).toISOString(),
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    mainEntityOfPage: `${siteUrl}/posts/${post.slug}/`,
+    image: [buildCoverImageUrl(post.coverImage)],
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.1),_transparent_24%),linear-gradient(to_bottom,_#f8fbff,_#f8fafc_45%,_#ffffff_100%)] text-slate-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+
       <Header />
 
       <main className="mx-auto max-w-5xl px-6 pb-20 pt-10">
@@ -176,9 +205,9 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <p className="mt-2 text-sm leading-7 text-slate-600">{olderPost.title}</p>
                 <Link
                   href={`/posts/${olderPost.slug}`}
-                  className="mt-4 inline-flex text-sm font-medium text-sky-700 transition hover:text-sky-900"
+                  className="mt-4 inline-flex rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-950"
                 >
-                  打开上一篇 →
+                  打开上一篇
                 </Link>
               </>
             ) : (
@@ -196,9 +225,9 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <p className="mt-2 text-sm leading-7 text-slate-600">{newerPost.title}</p>
                 <Link
                   href={`/posts/${newerPost.slug}`}
-                  className="mt-4 inline-flex text-sm font-medium text-sky-700 transition hover:text-sky-900"
+                  className="mt-4 inline-flex rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-950"
                 >
-                  打开下一篇 →
+                  打开下一篇
                 </Link>
               </>
             ) : (
