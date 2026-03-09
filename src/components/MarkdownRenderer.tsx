@@ -17,7 +17,7 @@ export default function MarkdownRenderer({ content }: Props) {
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="mt-12 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
+            <h2 className="mt-10 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
               {children}
             </h2>
           ),
@@ -41,7 +41,7 @@ export default function MarkdownRenderer({ content }: Props) {
           ),
           li: ({ children }) => <li>{children}</li>,
           blockquote: ({ children }) => (
-            <blockquote className="my-6 rounded-r-2xl border-l-4 border-sky-300 bg-sky-50 px-5 py-3 text-slate-700">
+            <blockquote className="my-6 rounded-2xl border border-sky-200 bg-sky-50 px-5 py-4 text-slate-700">
               {children}
             </blockquote>
           ),
@@ -58,7 +58,7 @@ export default function MarkdownRenderer({ content }: Props) {
                 {...props}
                 target={isExternal ? '_blank' : undefined}
                 rel={isExternal ? 'noreferrer' : undefined}
-                className="font-medium text-sky-700 underline decoration-sky-200 underline-offset-4 transition hover:text-sky-900"
+                className="font-medium text-sky-700 underline decoration-sky-300 underline-offset-4 transition hover:text-sky-900"
               >
                 {children}
               </a>
@@ -90,15 +90,19 @@ export default function MarkdownRenderer({ content }: Props) {
             )
           },
           img: ({ src, alt }) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={src || ''}
-              alt={alt || ''}
-              className="my-8 rounded-2xl border border-slate-200"
-            />
+            <div className="my-8 overflow-hidden rounded-3xl border border-slate-200 bg-slate-100">
+              <div className="aspect-[16/10]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={src || ''}
+                  alt={alt || ''}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </div>
           ),
           table: ({ children }) => (
-            <div className="my-8 overflow-x-auto">
+            <div className="my-8 overflow-x-auto rounded-2xl border border-slate-200">
               <table className="min-w-full border-collapse text-left text-sm">{children}</table>
             </div>
           ),

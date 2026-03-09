@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   },
 }
 
+const primaryButtonClass =
+  'inline-flex items-center rounded-full border-2 border-slate-900 bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800'
+const secondaryButtonClass =
+  'inline-flex items-center rounded-full border-2 border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -31,17 +36,11 @@ export default function AboutPage() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center rounded-full border border-slate-900 bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
+            <Link href="/" className={primaryButtonClass}>
               返回首页
             </Link>
 
-            <Link
-              href="/"
-              className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
-            >
+            <Link href="/" className={secondaryButtonClass}>
               查看文章
             </Link>
           </div>

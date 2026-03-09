@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Header from '@/components/Header'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
+import PostCoverImage from '@/components/PostCoverImage'
 import { getAllPostSlugs, getAllPostsMeta, getPostBySlug } from '@/lib/posts'
 
 type PageProps = {
@@ -13,6 +13,9 @@ type PageProps = {
 const siteOrigin = 'https://1031260154.github.io'
 const repoBase = '/furinablog'
 const siteUrl = `${siteOrigin}${repoBase}`
+
+const secondaryButtonClass =
+  'inline-flex items-center rounded-full border-2 border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
 
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
@@ -138,21 +141,17 @@ export default async function PostDetailPage({ params }: PageProps) {
           <span className="line-clamp-1 text-slate-700">{post.title}</span>
         </div>
 
-        <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           {getCoverImageSrc(basePath, post.coverImage) ? (
-            <div className="relative aspect-[16/8] bg-slate-100">
-              <Image
-                src={getCoverImageSrc(basePath, post.coverImage)!}
-                alt={post.title}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
+            <PostCoverImage
+              src={getCoverImageSrc(basePath, post.coverImage)!}
+              alt={post.title}
+              priority
+              sizes="(min-width: 1024px) 896px, 100vw"
+            />
           ) : null}
 
-          <div className="px-6 py-8 md:px-10 md:py-10">
+          <div className="mt-6">
             <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
               <span>{formatDate(post.createdAt)}</span>
               <span className="h-1 w-1 rounded-full bg-slate-300" />
@@ -194,10 +193,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <h2 className="mt-3 text-xl font-semibold text-slate-950">
                   {olderPost.title}
                 </h2>
-                <Link
-                  href={`/posts/${olderPost.slug}`}
-                  className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
-                >
+                <Link href={`/posts/${olderPost.slug}`} className={`${secondaryButtonClass} mt-5`}>
                   打开上一篇
                 </Link>
               </>
@@ -213,10 +209,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <h2 className="mt-3 text-xl font-semibold text-slate-950">
                   {newerPost.title}
                 </h2>
-                <Link
-                  href={`/posts/${newerPost.slug}`}
-                  className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
-                >
+                <Link href={`/posts/${newerPost.slug}`} className={`${secondaryButtonClass} mt-5`}>
                   打开下一篇
                 </Link>
               </>
