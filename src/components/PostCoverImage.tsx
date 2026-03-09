@@ -5,21 +5,17 @@ type Props = {
   alt: string
   priority?: boolean
   sizes?: string
-  className?: string
 }
 
 export default function PostCoverImage({
   src,
   alt,
   priority = false,
-  sizes = '(min-width: 1024px) 960px, 100vw',
-  className = '',
+  sizes = '(min-width: 768px) 50vw, 100vw',
 }: Props) {
   return (
-    <div
-      className={`overflow-hidden rounded-3xl border-2 border-slate-200 bg-slate-100 ${className}`}
-    >
-      <div className="relative h-[220px] w-full md:h-[320px]">
+    <div className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-slate-100">
+      <div className="relative h-56 w-full md:h-64">
         <Image
           src={src}
           alt={alt}

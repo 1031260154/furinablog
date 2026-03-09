@@ -155,7 +155,6 @@ export default async function PostDetailPage({ params }: PageProps) {
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
                 {post.title}
               </h1>
-
               <p className="mt-5 text-lg leading-8 text-slate-600">{post.summary}</p>
             </div>
 
@@ -192,9 +191,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             <p className="text-sm text-slate-500">上一篇</p>
             {olderPost ? (
               <>
-                <h2 className="mt-3 text-xl font-semibold text-slate-950">
-                  {olderPost.title}
-                </h2>
+                <h2 className="mt-3 text-xl font-semibold text-slate-950">{olderPost.title}</h2>
                 <Link href={`/posts/${olderPost.slug}`} className={`${secondaryButtonClass} mt-5`}>
                   打开上一篇
                 </Link>
@@ -208,9 +205,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             <p className="text-sm text-slate-500">下一篇</p>
             {newerPost ? (
               <>
-                <h2 className="mt-3 text-xl font-semibold text-slate-950">
-                  {newerPost.title}
-                </h2>
+                <h2 className="mt-3 text-xl font-semibold text-slate-950">{newerPost.title}</h2>
                 <Link href={`/posts/${newerPost.slug}`} className={`${secondaryButtonClass} mt-5`}>
                   打开下一篇
                 </Link>

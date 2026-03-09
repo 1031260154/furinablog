@@ -52,8 +52,6 @@ function getCoverImageSrc(basePath: string, coverImage?: string) {
 
 export default async function HomePage() {
   const posts = await getAllPostsMeta()
-  const featuredPost = posts[0]
-  const otherPosts = posts.slice(1)
   const basePath = getBasePath()
 
   return (
@@ -71,96 +69,35 @@ export default async function HomePage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            这个博客用来沉淀值得反复回看的内容。文章已经改成 Markdown 管理，后续维护会更清晰。
+            这是我的个人博客，用来沉淀值得长期保留的内容。现在文章已经切到 Markdown，
+            维护会更清晰，页面也统一成更简洁的卡片式布局。
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={featuredPost ? `/posts/${featuredPost.slug}` : '/about'}
-              className={primaryButtonClass}
-            >
-              {featuredPost ? '阅读最新文章' : '查看关于页面'}
-            </Link>
-
             <Link href="/about" className={secondaryButtonClass}>
               关于本站
             </Link>
+            {posts[0] ? (
+              <Link href={`/posts/${posts[0].slug}`} className={primaryButtonClass}>
+                阅读最新文章
+              </Link>
+            ) : null}
           </div>
         </section>
 
-        {featuredPost ? (
-          <section className="mt-10">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-950">精选文章</h2>
-              <span className="text-sm text-slate-500">最新发布</span>
-            </div>
-
-            <article className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
-              <div className="space-y-6">
-                <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
-                  <span>{formatDate(featuredPost.createdAt)}</span>
-                  <span className="h-1 w-1 rounded-full bg-slate-300" />
-                  <span>{featuredPost.readingTime} 分钟阅读</span>
-                  <span className="h-1 w-1 rounded-full bg-slate-300" />
-                  <span>{featuredPost.author}</span>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
-                    {featuredPost.title}
-                  </h3>
-
-                  <p className="mt-4 text-base leading-8 text-slate-600">
-                    {featuredPost.summary}
-                  </p>
-                </div>
-
-                {featuredPost.tags.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {featuredPost.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-
-                {getCoverImageSrc(basePath, featuredPost.coverImage) ? (
-                  <PostCoverImage
-                    src={getCoverImageSrc(basePath, featuredPost.coverImage)!}
-                    alt={featuredPost.title}
-                    priority
-                    sizes="(min-width: 1024px) 960px, 100vw"
-                  />
-                ) : null}
-
-                <Link
-                  href={`/posts/${featuredPost.slug}`}
-                  className={secondaryButtonClass}
-                >
-                  阅读全文
-                </Link>
-              </div>
-            </article>
-          </section>
-        ) : null}
-
-        <section className="mt-12">
+        <section className="mt-10">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-2xl font-semibold tracking-tight text-slate-950">最新文章</h2>
             <span className="text-sm text-slate-500">共 {posts.length} 篇</span>
           </div>
 
-          {otherPosts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="rounded-3xl border-2 border-slate-200 bg-white px-6 py-10 text-center text-slate-500 shadow-sm">
-              目前只有一篇文章，继续更新后会显示更多内容。
+              还没有文章，新增 Markdown 后这里会自动显示。
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2">
-              {otherPosts.map((post) => (
+              {posts.map((post, index) => (
                 <article
                   key={post.slug}
                   className="rounded-3xl border-2 border-slate-200 bg-white p-5 shadow-sm"
@@ -170,8 +107,7 @@ export default async function HomePage() {
                       <PostCoverImage
                         src={getCoverImageSrc(basePath, post.coverImage)!}
                         alt={post.title}
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                        className=""
+                        priority={index === 0}
                       />
                     ) : null}
 
@@ -179,6 +115,8 @@ export default async function HomePage() {
                       <span>{formatDate(post.createdAt)}</span>
                       <span className="h-1 w-1 rounded-full bg-slate-300" />
                       <span>{post.readingTime} 分钟阅读</span>
+                      <span className="h-1 w-1 rounded-full bg-slate-300" />
+                      <span>{post.author}</span>
                     </div>
 
                     <h3 className="text-xl font-semibold tracking-tight text-slate-950">
@@ -186,6 +124,19 @@ export default async function HomePage() {
                     </h3>
 
                     <p className="text-sm leading-7 text-slate-600">{post.summary}</p>
+
+                    {post.tags.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
 
                     <Link
                       href={`/posts/${post.slug}`}
