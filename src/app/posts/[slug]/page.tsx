@@ -15,7 +15,7 @@ const repoBase = '/furinablog'
 const siteUrl = `${siteOrigin}${repoBase}`
 
 const secondaryButtonClass =
-  'inline-flex items-center rounded-full border-2 border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
+  'inline-flex items-center rounded-full border-2 border-slate-400 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
 
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
@@ -141,17 +141,8 @@ export default async function PostDetailPage({ params }: PageProps) {
           <span className="line-clamp-1 text-slate-700">{post.title}</span>
         </div>
 
-        <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          {getCoverImageSrc(basePath, post.coverImage) ? (
-            <PostCoverImage
-              src={getCoverImageSrc(basePath, post.coverImage)!}
-              alt={post.title}
-              priority
-              sizes="(min-width: 1024px) 896px, 100vw"
-            />
-          ) : null}
-
-          <div className="mt-6">
+        <article className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
               <span>{formatDate(post.createdAt)}</span>
               <span className="h-1 w-1 rounded-full bg-slate-300" />
@@ -160,14 +151,16 @@ export default async function PostDetailPage({ params }: PageProps) {
               <span>{post.author}</span>
             </div>
 
-            <h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-              {post.title}
-            </h1>
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+                {post.title}
+              </h1>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">{post.summary}</p>
+              <p className="mt-5 text-lg leading-8 text-slate-600">{post.summary}</p>
+            </div>
 
             {post.tags.length > 0 ? (
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
@@ -178,15 +171,24 @@ export default async function PostDetailPage({ params }: PageProps) {
                 ))}
               </div>
             ) : null}
+
+            {getCoverImageSrc(basePath, post.coverImage) ? (
+              <PostCoverImage
+                src={getCoverImageSrc(basePath, post.coverImage)!}
+                alt={post.title}
+                priority
+                sizes="(min-width: 1024px) 896px, 100vw"
+              />
+            ) : null}
           </div>
         </article>
 
-        <section className="mt-8 rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-sm md:px-10 md:py-10">
+        <section className="mt-8 rounded-3xl border-2 border-slate-200 bg-white px-6 py-8 shadow-sm md:px-10 md:py-10">
           <MarkdownRenderer content={post.content} />
         </section>
 
         <section className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-sm text-slate-500">上一篇</p>
             {olderPost ? (
               <>
@@ -202,7 +204,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             )}
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-sm text-slate-500">下一篇</p>
             {newerPost ? (
               <>

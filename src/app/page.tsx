@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 const primaryButtonClass =
   'inline-flex items-center rounded-full border-2 border-slate-900 bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800'
 const secondaryButtonClass =
-  'inline-flex items-center rounded-full border-2 border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
+  'inline-flex items-center rounded-full border-2 border-slate-400 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950'
 
 function getBasePath() {
   return process.env.NODE_ENV === 'production' ? '/furinablog' : ''
@@ -61,7 +61,7 @@ export default async function HomePage() {
       <Header />
 
       <main className="mx-auto max-w-5xl px-6 py-10">
-        <section className="rounded-3xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+        <section className="rounded-3xl border-2 border-slate-200 bg-white px-8 py-10 shadow-sm">
           <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sm font-medium text-sky-700">
             Personal Blog
           </span>
@@ -71,8 +71,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            这个博客用来沉淀值得反复回看的内容。现在文章已经迁移到 Markdown，
-            后续维护会更清晰，也更适合长期更新。
+            这个博客用来沉淀值得反复回看的内容。文章已经改成 Markdown 管理，后续维护会更清晰。
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -96,17 +95,8 @@ export default async function HomePage() {
               <span className="text-sm text-slate-500">最新发布</span>
             </div>
 
-            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-              {getCoverImageSrc(basePath, featuredPost.coverImage) ? (
-                <PostCoverImage
-                  src={getCoverImageSrc(basePath, featuredPost.coverImage)!}
-                  alt={featuredPost.title}
-                  priority
-                  sizes="(min-width: 1024px) 960px, 100vw"
-                />
-              ) : null}
-
-              <div className="mt-6">
+            <article className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
+              <div className="space-y-6">
                 <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
                   <span>{formatDate(featuredPost.createdAt)}</span>
                   <span className="h-1 w-1 rounded-full bg-slate-300" />
@@ -115,16 +105,18 @@ export default async function HomePage() {
                   <span>{featuredPost.author}</span>
                 </div>
 
-                <h3 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">
-                  {featuredPost.title}
-                </h3>
+                <div>
+                  <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
+                    {featuredPost.title}
+                  </h3>
 
-                <p className="mt-4 text-base leading-8 text-slate-600">
-                  {featuredPost.summary}
-                </p>
+                  <p className="mt-4 text-base leading-8 text-slate-600">
+                    {featuredPost.summary}
+                  </p>
+                </div>
 
                 {featuredPost.tags.length > 0 ? (
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {featuredPost.tags.map((tag) => (
                       <span
                         key={tag}
@@ -136,9 +128,18 @@ export default async function HomePage() {
                   </div>
                 ) : null}
 
+                {getCoverImageSrc(basePath, featuredPost.coverImage) ? (
+                  <PostCoverImage
+                    src={getCoverImageSrc(basePath, featuredPost.coverImage)!}
+                    alt={featuredPost.title}
+                    priority
+                    sizes="(min-width: 1024px) 960px, 100vw"
+                  />
+                ) : null}
+
                 <Link
                   href={`/posts/${featuredPost.slug}`}
-                  className={`${secondaryButtonClass} mt-6`}
+                  className={secondaryButtonClass}
                 >
                   阅读全文
                 </Link>
@@ -154,7 +155,7 @@ export default async function HomePage() {
           </div>
 
           {otherPosts.length === 0 ? (
-            <div className="rounded-3xl border border-slate-200 bg-white px-6 py-10 text-center text-slate-500 shadow-sm">
+            <div className="rounded-3xl border-2 border-slate-200 bg-white px-6 py-10 text-center text-slate-500 shadow-sm">
               目前只有一篇文章，继续更新后会显示更多内容。
             </div>
           ) : (
@@ -162,32 +163,33 @@ export default async function HomePage() {
               {otherPosts.map((post) => (
                 <article
                   key={post.slug}
-                  className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+                  className="rounded-3xl border-2 border-slate-200 bg-white p-5 shadow-sm"
                 >
-                  {getCoverImageSrc(basePath, post.coverImage) ? (
-                    <PostCoverImage
-                      src={getCoverImageSrc(basePath, post.coverImage)!}
-                      alt={post.title}
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                    />
-                  ) : null}
+                  <div className="space-y-5">
+                    {getCoverImageSrc(basePath, post.coverImage) ? (
+                      <PostCoverImage
+                        src={getCoverImageSrc(basePath, post.coverImage)!}
+                        alt={post.title}
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        className=""
+                      />
+                    ) : null}
 
-                  <div className="mt-5">
                     <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
                       <span>{formatDate(post.createdAt)}</span>
                       <span className="h-1 w-1 rounded-full bg-slate-300" />
                       <span>{post.readingTime} 分钟阅读</span>
                     </div>
 
-                    <h3 className="mt-4 text-xl font-semibold tracking-tight text-slate-950">
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-950">
                       {post.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-7 text-slate-600">{post.summary}</p>
+                    <p className="text-sm leading-7 text-slate-600">{post.summary}</p>
 
                     <Link
                       href={`/posts/${post.slug}`}
-                      className={`${secondaryButtonClass} mt-5 px-4 py-2`}
+                      className="inline-flex items-center rounded-full border-2 border-slate-400 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:text-slate-950"
                     >
                       阅读全文
                     </Link>
